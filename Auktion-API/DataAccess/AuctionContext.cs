@@ -1,0 +1,37 @@
+﻿using Auktion_API.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Auktion_API.DataAccess;
+
+public class AuctionContext : DbContext
+{
+    public AuctionContext(DbContextOptions<AuctionContext> options) : base(options) { }
+
+    public DbSet<Models.Auction> Auctions => Set<Auction>();
+    public DbSet<Models.Lot> Lots => Set<Lot>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Auction>(entity =>
+        {
+            entity.HasKey(a => a.Id);
+            entity.Property(a => a.Title).IsRequired().HasMaxLength(200);
+            entity.Property(a => a.Description).HasMaxLength(2000);
+
+            entity
+                .HasMany(a => a.Lots)
+                .WithOne(l => l.Auction!)
+                .HasForeignKey(l => l.AuctionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Lot>(entity =>
+        {
+            entity.HasKey(l => l.Id);
+            entity.Property(l => l.Title).IsRequired().HasMaxLength(200);
+            entity.Property(l => l.Description).HasMaxLength(2000);
+
+            entity.HasIndex(l => new { l.AuctionId, l.LotNumber }).IsUnique();
+        });
+    }
+}

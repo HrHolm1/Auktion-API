@@ -1,3 +1,6 @@
+using Auktion_API.DataAccess;
+using Microsoft.EntityFrameworkCore;
+
 namespace Auktion_API;
 
 public class Program
@@ -7,10 +10,10 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
-        
         builder.Services.AddOpenApi();
+        builder.Services.AddDbContext<AuctionContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
         var app = builder.Build();
 
