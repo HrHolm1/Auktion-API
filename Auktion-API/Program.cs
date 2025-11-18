@@ -1,4 +1,5 @@
 using Auktion_API.DataAccess;
+using Auktion_API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Auktion_API;
@@ -14,7 +15,8 @@ public class Program
         builder.Services.AddOpenApi();
         builder.Services.AddDbContext<AuctionContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-
+        builder.Services.AddScoped<IAuctionService, AuctionService>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
