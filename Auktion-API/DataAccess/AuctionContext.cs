@@ -12,6 +12,8 @@ public class AuctionContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("auctions");
+        
         modelBuilder.Entity<Auction>(entity =>
         {
             entity.HasKey(a => a.Id);
@@ -30,7 +32,8 @@ public class AuctionContext : DbContext
             entity.HasKey(l => l.Id);
             entity.Property(l => l.Title).IsRequired().HasMaxLength(200);
             entity.Property(l => l.Description).HasMaxLength(2000);
-
+            entity.Property(l => l.EndingPrice);
+            
             entity.HasIndex(l => new { l.AuctionId, l.LotNumber }).IsUnique();
         });
     }

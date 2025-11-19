@@ -9,6 +9,7 @@ public class Lot
     public string? Description { get; set; }
 
     public double StartingPrice { get; set; }
+    public double EndingPrice { get; set; }
     public double EstimatedPrice { get; set; } // Estimated price from the auction house
 
     public int AuctionId { get; set; }
