@@ -38,6 +38,11 @@ public class Program
             
             app.MapOpenApi();
         }
+        
+        app.UseCors(options => options
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin());
 
         app.UseHttpsRedirection();
 
