@@ -13,6 +13,4 @@ public class Lot
     public double EstimatedPrice { get; set; } // Estimated price from the auction house
 
     public int AuctionId { get; set; }
-    public Auction? Auction { get; set; }
-    
 }

@@ -9,10 +9,14 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
+        
+        builder.Services.AddCors();
+        
         builder.Services.AddControllers();
         
+        // Add services to the container.
+        builder.Services.AddScoped<AuctionService>();
+
         // Swagger
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -20,9 +24,14 @@ public class Program
         //builder.Services.AddOpenApi();
         builder.Services.AddDbContext<AuctionContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-        builder.Services.AddScoped<IAuctionService, AuctionService>();
         
         var app = builder.Build();
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AuctionContext>(); // your context type
+            db.Database.Migrate(); // applies any pending migrations, creates DB/tables if needed
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -35,16 +44,11 @@ public class Program
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
                 options.RoutePrefix = string.Empty;
             });
-            
-            app.MapOpenApi();
         }
         
-        app.UseCors(options => options
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin());
-
-        app.UseHttpsRedirection();
+        app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        
+        //app.UseHttpsRedirection();
 
         app.UseAuthorization();
 

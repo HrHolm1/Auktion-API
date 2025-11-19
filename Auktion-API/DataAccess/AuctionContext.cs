@@ -22,7 +22,7 @@ public class AuctionContext : DbContext
 
             entity
                 .HasMany(a => a.Lots)
-                .WithOne(l => l.Auction!)
+                .WithOne()
                 .HasForeignKey(l => l.AuctionId)
                 .OnDelete(DeleteBehavior.Cascade);
         });

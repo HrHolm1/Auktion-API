@@ -18,14 +18,14 @@ public class AuctionController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Getall()
     {
-        var auctions = _auctionService.GetAllAsync();
+        var auctions = await _auctionService.GetAllAsync();
         return Ok(auctions);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var auction = _auctionService.GetByIdAsync(id);
+        var auction = await _auctionService.GetByIdAsync(id);
         if (auction == null)
             return NotFound();
         return Ok(auction);
