@@ -4,7 +4,6 @@ public class Lot
 {
     public int Id { get; set; }
     public int LotNumber { get; set; }
-
     public string Title { get; set; } = String.Empty;
     public string? Description { get; set; }
 
