@@ -21,6 +21,15 @@ public class LotService : ILotService
             .ToListAsync();
     }
     
+    // Get all lots from a specific auction by id
+    public async Task<List<Lot>> GetAllFromAuctionAsync(int auctionId)
+    {
+        return await _db.Lots
+            .AsNoTracking()
+            .Where(l => l.AuctionId == auctionId)
+            .ToListAsync();
+    }
+    
     //Gets a lot by its ID
     public async Task<Lot?> GetByIdAsync(int id)
     {
@@ -32,6 +41,16 @@ public class LotService : ILotService
     //Creates a lot
     public async Task<Lot> CreateAsync(Lot lot)
     {
+        
+        // THE DATABASE SHOULD HANDLE THIS!!!!!!
+        if (lot.LotNumber == 0 || lot.LotNumber.ToString() == "")
+        {
+            lot.LotNumber = await _db.Lots
+                .Where(l => l.AuctionId == lot.AuctionId)
+                .Select(l => (int?)l.LotNumber)
+                .MaxAsync() + 1 ?? 1;
+        }
+        
         _db.Lots.Add(lot);
         await _db.SaveChangesAsync();
         

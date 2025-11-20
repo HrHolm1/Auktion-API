@@ -23,6 +23,13 @@ public class LotController : ControllerBase
         return Ok(lots);
     }
     
+    [HttpGet("auction/{auctionId:int}")]
+    public async Task<IActionResult> GetAllFromId(int auctionId)
+    {
+        var lots = await _lotService.GetAllFromAuctionAsync(auctionId);
+        return Ok(lots);
+    }
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
