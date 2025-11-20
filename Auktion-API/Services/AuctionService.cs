@@ -36,6 +36,7 @@ public class AuctionService : IAuctionService
     {
         _db.Auctions.Add(auction);
         await _db.SaveChangesAsync();
+        
         return auction;
     }
 
@@ -43,10 +44,12 @@ public class AuctionService : IAuctionService
     public async Task<bool> UpdateAsync(Auction auction)
     {
         var exists = await _db.Auctions.AnyAsync(a => a.Id == auction.Id);
-        if (!exists) return false;
+        if (!exists) 
+            return false;
 
         _db.Auctions.Update(auction);
         await _db.SaveChangesAsync();
+        
         return true;
     }
 
@@ -54,10 +57,12 @@ public class AuctionService : IAuctionService
     public async Task<bool> DeleteAsync(int id)
     {
         var entity = await _db.Auctions.FindAsync(id);
-        if (entity is null) return false;
+        if (entity is null) 
+            return false;
 
         _db.Auctions.Remove(entity);
         await _db.SaveChangesAsync();
+        
         return true;
     }
 }
