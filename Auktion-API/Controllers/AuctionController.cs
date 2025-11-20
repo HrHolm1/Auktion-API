@@ -28,6 +28,7 @@ public class AuctionController : ControllerBase
         var auction = await _auctionService.GetByIdAsync(id);
         if (auction == null)
             return NotFound();
+        
         return Ok(auction);
     }
 
@@ -45,8 +46,8 @@ public class AuctionController : ControllerBase
         if (id != auction.Id)
             return BadRequest();
 
-        var succes = await _auctionService.UpdateAsync(auction);
-        if (!succes)
+        var success = await _auctionService.UpdateAsync(auction);
+        if (!success)
             return NotFound();
 
         return NoContent();
