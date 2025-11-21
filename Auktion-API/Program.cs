@@ -17,6 +17,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddScoped<AuctionService>();
         builder.Services.AddScoped<LotService>();
+        builder.Services.AddScoped<BidService>();
         
         // Swagger
         builder.Services.AddEndpointsApiExplorer();

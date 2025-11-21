@@ -9,7 +9,8 @@ public class AuctionContext : DbContext
 
     public DbSet<Models.Auction> Auctions => Set<Auction>();
     public DbSet<Models.Lot> Lots => Set<Lot>();
-
+    public DbSet<Models.Bid> Bids => Set<Bid>();
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("auctions");
@@ -36,5 +37,22 @@ public class AuctionContext : DbContext
             
             entity.HasIndex(l => new { l.AuctionId, l.LotNumber }).IsUnique();
         });
+
+        modelBuilder.Entity<Bid>(entity =>
+        {
+            entity.HasKey(b => b.Id);
+            entity.Property(b => b.Amount).IsRequired();
+            entity.Property(b => b.PlacedAt).IsRequired();
+            entity.Property(b => b.UserId).IsRequired();
+
+            entity
+                .HasOne(b => b.Lot)
+                .WithMany()
+                .HasForeignKey(b => b.LotId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+
+
     }
 }
