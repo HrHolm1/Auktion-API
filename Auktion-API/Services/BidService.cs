@@ -19,7 +19,7 @@ public class BidService : IBidService
     {
         return await _db.Bids
             .AsNoTracking()
-            .Include(b => b.Lot)
+            //.Include(b => b.Lot)
             .Where(b => b.LotId == lotId)
             .OrderByDescending(b => b.PlacedAt)
             .ToListAsync();
@@ -30,7 +30,7 @@ public class BidService : IBidService
     {
         return await _db.Bids
             .AsNoTracking()
-            .Include(b => b.Lot)
+            //.Include(b => b.Lot)
             .Where(b => b.UserId == userId)
             .OrderByDescending(b => b.PlacedAt)
             .ToListAsync();

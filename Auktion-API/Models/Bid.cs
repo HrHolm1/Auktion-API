@@ -12,5 +12,5 @@ public class Bid
 
     public DateTime PlacedAt { get; set; } //Datetime til at hvornår buddet er sat op, bliver til createdAt i DB.
     
-    public Lot Lot { get; set; } = null; // Navigation Property
+    //public Lot Lot { get; set; } = null; // Navigation Property
 }

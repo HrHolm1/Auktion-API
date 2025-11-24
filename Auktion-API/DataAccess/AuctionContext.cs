@@ -46,13 +46,13 @@ public class AuctionContext : DbContext
             entity.Property(b => b.UserId).IsRequired();
 
             entity
-                .HasOne(b => b.Lot)
-                .WithMany()
+                //.HasOne(b => b.Lot)
+                //.WithMany()
+                .HasOne<Lot>()       // no navigation property
+                .WithMany()          // no reverse navigation either
                 .HasForeignKey(b => b.LotId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
-
-
-
+        
     }
 }
