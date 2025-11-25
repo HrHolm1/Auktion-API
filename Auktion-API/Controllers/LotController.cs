@@ -70,4 +70,13 @@ public class LotController : ControllerBase
         return NoContent();
     }
 
+    [HttpGet("{auctionId}/{lotNumber}")]
+    public async Task<IActionResult> GetByAuctionId(int auctionId, int lotNumber)
+    {
+        var lot = await _lotService.GetLotByAuctionIdAsync(auctionId, lotNumber);
+        if (lot == null)
+            return NotFound();
+
+        return Ok(lot);
+    }
 }

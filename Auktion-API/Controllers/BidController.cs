@@ -44,6 +44,12 @@ public class BidController : ControllerBase
     public async Task<IActionResult> PlaceBid(Bid bid)
     {
         var newBid = await _bidService.PlaceBidAsync(bid);
+
+        if (newBid == null)
+        {
+            return BadRequest(new { message = "Invalid amount. Amount needs to be higher than the highest bid!" });
+        }
+        
         return CreatedAtAction(nameof(GetBidsBylot), new { lotId = newBid.LotId }, newBid);
     }
 

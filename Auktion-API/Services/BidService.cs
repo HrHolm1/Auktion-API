@@ -1,4 +1,5 @@
 ﻿using Auktion_API.DataAccess;
+using Auktion_API.Interfaces;
 using Auktion_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -37,8 +38,17 @@ public class BidService : IBidService
     }
     
     //Places a new bid on a lot
-    public async Task<Bid> PlaceBidAsync(Bid bid)
+    public async Task<Bid?> PlaceBidAsync(Bid bid)
     {
+        
+        // Find the highest bid
+        var highestBid = await _db.Bids.MaxAsync(b => b.Amount);
+
+        if (bid.Amount <= highestBid)
+        {
+            return null;
+        }
+        
         bid.PlacedAt = DateTime.UtcNow;
 
         _db.Bids.Add(bid);

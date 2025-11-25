@@ -1,4 +1,5 @@
 ﻿using Auktion_API.DataAccess;
+using Auktion_API.Interfaces;
 using Auktion_API.Models;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,6 @@
 ﻿using Auktion_API.Models;
 
-namespace Auktion_API.Services;
+namespace Auktion_API.Interfaces;
 
 public interface IBidService
 {

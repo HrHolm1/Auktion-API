@@ -1,4 +1,5 @@
 ﻿using Auktion_API.DataAccess;
+using Auktion_API.Interfaces;
 using Auktion_API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -79,5 +80,13 @@ public class LotService : ILotService
         
         return true;
     }
-    
+
+    public async Task<Lot?> GetLotByAuctionIdAsync(int auctionId, int lotNumber)
+    {
+        var lot = await _db.Lots
+            .Where(l => l.AuctionId == auctionId && l.LotNumber == lotNumber)
+            .FirstOrDefaultAsync();
+
+        return lot ?? null;
+    }
 }
