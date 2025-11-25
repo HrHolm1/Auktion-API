@@ -23,7 +23,7 @@ public class BidController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetBidsByUser(string userId)
+    public async Task<IActionResult> GetBidsByUser(int userId)
     {
         var bids = await _bidService.GetBidsByUserIdAsync(userId);
         return Ok(bids);

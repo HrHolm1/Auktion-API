@@ -10,6 +10,7 @@ public class AuctionContext : DbContext
     public DbSet<Models.Auction> Auctions => Set<Auction>();
     public DbSet<Models.Lot> Lots => Set<Lot>();
     public DbSet<Models.Bid> Bids => Set<Bid>();
+    public DbSet<Models.User> Users => Set<User>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,7 +53,29 @@ public class AuctionContext : DbContext
                 .WithMany()          // no reverse navigation either
                 .HasForeignKey(b => b.LotId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity
+                .HasOne(b => b.User)
+                .WithMany(u => u.Bids)
+                .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         });
-        
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(u => u.Id);
+            entity.Property(u => u.Username)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(u => u.Password)
+                .IsRequired()
+                .HasMaxLength(500);
+        });
+
+
+
     }
 }

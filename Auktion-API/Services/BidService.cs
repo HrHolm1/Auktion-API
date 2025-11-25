@@ -26,7 +26,7 @@ public class BidService : IBidService
     }
     
     //Gets all bids placed by a specific user
-    public async Task<List<Bid>> GetBidsByUserIdAsync(string userId)
+    public async Task<List<Bid>> GetBidsByUserIdAsync(int userId)
     {
         return await _db.Bids
             .AsNoTracking()
