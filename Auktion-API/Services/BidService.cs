@@ -40,15 +40,14 @@ public class BidService : IBidService
     //Places a new bid on a lot
     public async Task<Bid?> PlaceBidAsync(Bid bid)
     {
-        
-        // Find the highest bid
-        var highestBid = await _db.Bids.MaxAsync(b => b.Amount);
+        var highestBid = await _db.Bids
+            .Where(b => b.LotId == bid.LotId)   // only this lot
+            .OrderByDescending(b => b.Amount)
+            .FirstOrDefaultAsync();
 
-        if (bid.Amount <= highestBid)
-        {
+        if (highestBid != null && bid.Amount <= highestBid.Amount)
             return null;
-        }
-        
+
         bid.PlacedAt = DateTime.UtcNow;
 
         _db.Bids.Add(bid);
@@ -56,6 +55,7 @@ public class BidService : IBidService
 
         return bid;
     }
+
     
     //Gets the highest bid for a specific lot
     public async Task<Bid?> GetHighestBidForLotAsync(int lotId)
