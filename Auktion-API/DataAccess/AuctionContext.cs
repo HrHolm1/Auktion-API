@@ -69,6 +69,10 @@ public class AuctionContext : DbContext
             entity.Property(u => u.Username)
                 .IsRequired()
                 .HasMaxLength(100);
+            entity.Property(u => u.Role)
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasDefaultValue("user");
 
             entity.Property(u => u.Password)
                 .IsRequired()

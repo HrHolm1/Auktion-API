@@ -8,6 +8,8 @@ public class User
 
     public string Password { get; set; } = String.Empty; // Bliver gemt i clear text, men det går til dette
     
+    public string Role { get; set; }
+    
     public List<Bid> Bids { get; set; } = new(); // Navigation property
     
 }
