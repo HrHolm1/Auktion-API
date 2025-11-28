@@ -38,6 +38,7 @@ public class Program
         builder.Services.AddScoped<AuctionService>();
         builder.Services.AddScoped<LotService>();
         builder.Services.AddScoped<BidService>();
+        builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<AuthService>();
         
         // Swagger
