@@ -1,4 +1,5 @@
 ﻿using Auktion_API.DataAccess;
+using Auktion_API.DTOs;
 using Auktion_API.Interfaces;
 using Auktion_API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +17,22 @@ public class BidService : IBidService
     }
     
     //Gets all bids for a specific lot
-    public async Task<List<Bid>> GetBidsByLotIdAsync(int lotId)
+    public async Task<List<BidDto>> GetBidsByLotIdAsync(int lotId)
     {
         return await _db.Bids
             .AsNoTracking()
-            //.Include(b => b.Lot)
             .Where(b => b.LotId == lotId)
+            .Include(b => b.User)
             .OrderByDescending(b => b.PlacedAt)
+            .Select(b => new BidDto
+            {
+                Id = b.Id,
+                Amount = b.Amount,
+                PlacedAt = b.PlacedAt,
+                LotId = b.LotId,
+                UserId = b.UserId,
+                Username = b.User.Username
+            })
             .ToListAsync();
     }
     

@@ -34,6 +34,7 @@ public class AuctionContext : DbContext
             entity.HasKey(l => l.Id);
             entity.Property(l => l.Title).IsRequired().HasMaxLength(200);
             entity.Property(l => l.Description).HasMaxLength(2000);
+            entity.Property(l => l.StartingPrice).HasDefaultValue(1);
             entity.Property(l => l.EndingPrice);
             
             entity.HasIndex(l => new { l.AuctionId, l.LotNumber }).IsUnique();
@@ -59,8 +60,6 @@ public class AuctionContext : DbContext
                 .WithMany(u => u.Bids)
                 .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -78,8 +77,5 @@ public class AuctionContext : DbContext
                 .IsRequired()
                 .HasMaxLength(500);
         });
-
-
-
     }
 }
