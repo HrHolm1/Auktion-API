@@ -1,5 +1,6 @@
 ﻿using Auktion_API.Models;
 using Auktion_API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auktion_API.Controllers;
@@ -33,6 +34,7 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(User user)
     {
@@ -40,6 +42,7 @@ public class UserController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = newUser.Id }, newUser);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, User user)
     {
@@ -53,6 +56,7 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
