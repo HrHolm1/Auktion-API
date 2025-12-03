@@ -65,7 +65,7 @@ public class AuctionContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
-            entity.Property(u => u.Username)
+            entity.Property(u => u.Email)
                 .IsRequired()
                 .HasMaxLength(100);
             entity.Property(u => u.Role)

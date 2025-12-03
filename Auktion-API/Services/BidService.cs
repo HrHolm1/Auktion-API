@@ -31,7 +31,7 @@ public class BidService : IBidService
                 PlacedAt = b.PlacedAt,
                 LotId = b.LotId,
                 UserId = b.UserId,
-                Username = b.User.Username
+                Username = b.User.Email
             })
             .ToListAsync();
     }

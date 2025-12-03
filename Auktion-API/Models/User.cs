@@ -4,7 +4,7 @@ public class User
 {
     public int Id { get; set; } // Primary Key
 
-    public string Username { get; set; } = String.Empty;
+    public string Email { get; set; } = String.Empty;
 
     public string Password { get; set; } = String.Empty; // Bliver gemt i clear text, men det går til dette
     

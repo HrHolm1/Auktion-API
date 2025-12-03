@@ -25,11 +25,11 @@ public class AuthService
     {
         var userToValidate = new User()
         {
-            Username = loginRequest.Email,
+            Email = loginRequest.Email,
             Password = loginRequest.Password
         };
         
-        var returnUser = await _db.Users.FirstOrDefaultAsync(x => x.Username == userToValidate.Username && x.Password == userToValidate.Password);
+        var returnUser = await _db.Users.FirstOrDefaultAsync(x => x.Email == userToValidate.Email && x.Password == userToValidate.Password);
         return returnUser;
     }
 

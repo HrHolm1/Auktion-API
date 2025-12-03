@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
             Token = token,
             Role = user.Role,
             userId = user.Id,
-            username = user.Username
+            username = user.Email
         };
         return Ok(loginResponse);
     }

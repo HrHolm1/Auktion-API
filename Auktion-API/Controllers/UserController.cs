@@ -33,8 +33,7 @@ public class UserController : ControllerBase
         
         return Ok(user);
     }
-
-    [Authorize]
+    
     [HttpPost]
     public async Task<IActionResult> Create(User user)
     {
