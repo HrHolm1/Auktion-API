@@ -89,4 +89,26 @@ public class LotService : ILotService
 
         return lot ?? null;
     }
+
+    public async Task<bool> CloseLotAsync(int lotId)
+    {
+        var lot = await _db.Lots.FindAsync(lotId);
+        if (lot == null)
+            return false;
+
+        var winningBid = await _db.Bids
+            .Where(b => b.LotId == lotId)
+            .OrderByDescending(b => b.Amount)
+            .ThenByDescending(b => b.PlacedAt)
+            .FirstOrDefaultAsync();
+
+        if (winningBid != null)
+        {
+            lot.WinnerUserId = winningBid.UserId;
+            lot.EndingPrice = winningBid.Amount;
+        }
+
+        await _db.SaveChangesAsync();
+        return true;
+    }
 }

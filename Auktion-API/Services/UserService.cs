@@ -66,4 +66,11 @@ public class UserService : IUserService
 
         return true;
     }
+
+    public async Task<List<Lot>> GetWonLotsAsync(int userId)
+    {
+        return await _db.Lots
+            .Where(l => l.WinnerUserId == userId)
+            .ToListAsync();
+    }
 }

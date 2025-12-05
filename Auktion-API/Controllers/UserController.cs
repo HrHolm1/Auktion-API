@@ -67,4 +67,16 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
+    // Add authorize here?
+    [HttpGet("{id}/won-lots")]
+    public async Task<IActionResult> GetWonLots(int id)
+    {
+        var user = await _userService.GetByIdAsync(id);
+        if (user == null)
+            return NotFound();
+
+        var wonLots = await _userService.GetWonLotsAsync(id);
+        return Ok(wonLots);
+    }
+
 }

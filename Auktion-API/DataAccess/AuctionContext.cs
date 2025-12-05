@@ -38,6 +38,13 @@ public class AuctionContext : DbContext
             entity.Property(l => l.EndingPrice);
             
             entity.HasIndex(l => new { l.AuctionId, l.LotNumber }).IsUnique();
+
+            // Winner stuff
+            entity
+                .HasOne(l => l.Winner)
+                .WithMany(u => u.WonLots)
+                .HasForeignKey(l => l.WinnerUserId)
+                .OnDelete(DeleteBehavior.SetNull); // if user is deleted, keep lot but clear winner
         });
 
         modelBuilder.Entity<Bid>(entity =>
@@ -48,10 +55,8 @@ public class AuctionContext : DbContext
             entity.Property(b => b.UserId).IsRequired();
 
             entity
-                //.HasOne(b => b.Lot)
-                //.WithMany()
-                .HasOne<Lot>()       // no navigation property
-                .WithMany()          // no reverse navigation either
+                .HasOne<Lot>() // no navigation property
+                .WithMany() // no reverse navigation either
                 .HasForeignKey(b => b.LotId)
                 .OnDelete(DeleteBehavior.Restrict);
 

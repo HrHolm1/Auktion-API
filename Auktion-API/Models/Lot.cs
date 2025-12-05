@@ -12,4 +12,8 @@ public class Lot
     public double EstimatedPrice { get; set; } // Estimated price from the auction house
 
     public int AuctionId { get; set; }
+
+    // winner (nullable, because lot might not be sold yet)
+    public int? WinnerUserId { get; set; }
+    public User? Winner { get; set; }
 }

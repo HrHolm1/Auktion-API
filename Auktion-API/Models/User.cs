@@ -11,5 +11,7 @@ public class User
     public string Role { get; set; }
     
     public List<Bid> Bids { get; set; } = new(); // Navigation property
-    
+
+    // all lots this user has won
+    public List<Lot> WonLots { get; set; } = new();
 }
