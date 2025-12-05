@@ -111,4 +111,47 @@ public class LotService : ILotService
         await _db.SaveChangesAsync();
         return true;
     }
+
+    public async Task<List<LotImage>?> AddImagesAsync(int lotId, List<IFormFile> files, string webRootPath)
+    {
+        var lot = await _db.Lots.FirstOrDefaultAsync(l => l.Id == lotId);
+        if (lot == null)
+            return null; // controller can turn this into 404
+
+        if (files.Count == 0)
+            return new List<LotImage>();
+
+        var uploadPath = Path.Combine(webRootPath, "uploads", "lots", lotId.ToString());
+        Directory.CreateDirectory(uploadPath);
+
+        var createdImages = new List<LotImage>();
+
+        foreach (var file in files)
+        {
+            if (file.Length == 0)
+                continue;
+
+            var fileName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            await using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var image = new LotImage
+            {
+                LotId = lotId,
+                FileName = fileName,
+                Url = $"/uploads/lots/{lotId}/{fileName}"
+            };
+
+            createdImages.Add(image);
+        }
+
+        _db.LotImages.AddRange(createdImages);
+        await _db.SaveChangesAsync();
+
+        return createdImages;
+    }
 }

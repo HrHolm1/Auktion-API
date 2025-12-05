@@ -16,4 +16,6 @@ public class Lot
     // winner (nullable, because lot might not be sold yet)
     public int? WinnerUserId { get; set; }
     public User? Winner { get; set; }
+
+    public List<LotImage> Images { get; set; } = new(); // Navigation for image
 }

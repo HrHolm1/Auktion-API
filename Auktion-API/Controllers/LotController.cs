@@ -11,10 +11,13 @@ namespace Auktion_API.Controllers;
 public class LotController : ControllerBase
 {
     private readonly LotService _lotService;
+    private readonly IWebHostEnvironment _env;
 
-    public LotController(LotService lotService)
+
+    public LotController(LotService lotService, IWebHostEnvironment env)
     {
         _lotService = lotService;
+        _env = env;
     }
 
     [HttpGet]
@@ -82,5 +85,20 @@ public class LotController : ControllerBase
             return NotFound();
 
         return Ok(lot);
+    }
+
+    // Image upload
+    [HttpPost("{lotId}/images")]
+    public async Task<IActionResult> UploadImages(int lotId, [FromForm] List<IFormFile> files)
+    {
+        if (files.Count == 0)
+            return BadRequest("No files uploaded");
+
+        var images = await _lotService.AddImagesAsync(lotId, files, _env.WebRootPath);
+
+        if (images == null)
+            return NotFound("Lot not found");
+
+        return Ok(images);
     }
 }

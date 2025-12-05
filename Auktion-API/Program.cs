@@ -77,6 +77,9 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
+        // Angular needs this for images
+        app.UseStaticFiles();
+
         app.MapControllers();
 
         app.Run();
