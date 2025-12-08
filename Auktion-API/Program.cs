@@ -40,6 +40,7 @@ public class Program
         builder.Services.AddScoped<BidService>();
         builder.Services.AddScoped<UserService>();
         builder.Services.AddScoped<AuthService>();
+        builder.Services.AddHostedService<LotClosingBackgroundService>();
         
         // Swagger
         builder.Services.AddEndpointsApiExplorer();

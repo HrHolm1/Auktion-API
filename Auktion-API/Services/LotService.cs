@@ -96,6 +96,9 @@ public class LotService : ILotService
         if (lot == null)
             return false;
 
+        if (lot.IsClosed)
+            return true;
+
         var winningBid = await _db.Bids
             .Where(b => b.LotId == lotId)
             .OrderByDescending(b => b.Amount)
@@ -107,6 +110,8 @@ public class LotService : ILotService
             lot.WinnerUserId = winningBid.UserId;
             lot.EndingPrice = winningBid.Amount;
         }
+
+        lot.IsClosed = true;
 
         await _db.SaveChangesAsync();
         return true;

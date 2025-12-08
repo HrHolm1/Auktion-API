@@ -12,7 +12,13 @@ public class Lot
     public double EstimatedPrice { get; set; } // Estimated price from the auction house
 
     public int AuctionId { get; set; }
-
+    
+    //When a biddinground for a lot ends
+    public DateTime EndTime { get; set; }
+    
+    //Sets to true when a lot is closed and the winner is found
+    public bool IsClosed { get; set; }
+    
     // winner (nullable, because lot might not be sold yet)
     public int? WinnerUserId { get; set; }
     public User? Winner { get; set; }
