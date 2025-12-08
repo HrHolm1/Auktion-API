@@ -18,6 +18,7 @@ public class LotService : ILotService
     public async Task<List<Lot>> GetAllAsync()
     {
         return await _db.Lots
+            .Include(l => l.Images)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -26,6 +27,7 @@ public class LotService : ILotService
     public async Task<List<Lot>> GetAllFromAuctionAsync(int auctionId)
     {
         return await _db.Lots
+            .Include(l => l.Images)
             .AsNoTracking()
             .Where(l => l.AuctionId == auctionId)
             .ToListAsync();
@@ -35,6 +37,7 @@ public class LotService : ILotService
     public async Task<Lot?> GetByIdAsync(int id)
     {
         return await _db.Lots
+            .Include(l => l.Images)
             .AsNoTracking()
             .FirstOrDefaultAsync(l => l.Id == id);
     }
@@ -84,6 +87,7 @@ public class LotService : ILotService
     public async Task<Lot?> GetLotByAuctionIdAsync(int auctionId, int lotNumber)
     {
         var lot = await _db.Lots
+            .Include(l => l.Images)
             .Where(l => l.AuctionId == auctionId && l.LotNumber == lotNumber)
             .FirstOrDefaultAsync();
 
@@ -143,7 +147,7 @@ public class LotService : ILotService
             {
                 LotId = lotId,
                 FileName = fileName,
-                Url = $"/uploads/lots/{lotId}/{fileName}"
+                Url = $"http://localhost:5264/uploads/lots/{lotId}/{fileName}"
             };
 
             createdImages.Add(image);

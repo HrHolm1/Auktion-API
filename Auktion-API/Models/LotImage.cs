@@ -1,10 +1,14 @@
-﻿namespace Auktion_API.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace Auktion_API.Models;
 
 public class LotImage
 {
     public int Id { get; set; }
 
     public int LotId { get; set; }
+    
+    [JsonIgnore]
     public Lot Lot { get; set; } = null!;
 
     public string FileName { get; set; } = string.Empty;   // stored file name
