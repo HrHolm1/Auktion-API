@@ -24,7 +24,7 @@ public class LotClosingBackgroundService : BackgroundService
                 var db = scope.ServiceProvider.GetRequiredService<AuctionContext>();
                 var lotService = scope.ServiceProvider.GetRequiredService<LotService>();
 
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
 
                 var lotIdsToClose = await db.Lots
                     .AsNoTracking()
@@ -32,6 +32,8 @@ public class LotClosingBackgroundService : BackgroundService
                     .Select(l => l.Id)
                     .ToListAsync(stoppingToken);
 
+                Console.WriteLine("lots to close:::::::::" + lotIdsToClose.Count);
+                
                 foreach (var lotId in lotIdsToClose)
                 {
                     await lotService.CloseLotAsync(lotId);
