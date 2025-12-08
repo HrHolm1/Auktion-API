@@ -40,6 +40,12 @@ public class AuctionContext : DbContext
             entity.Property(l => l.Description).HasMaxLength(2000);
             entity.Property(l => l.StartingPrice).HasDefaultValue(1);
             entity.Property(l => l.EndingPrice);
+
+            entity.Property(l => l.EndTime)
+                .IsRequired();
+
+            entity.Property(l => l.IsClosed)
+                .HasDefaultValue(false);
             
             entity.HasIndex(l => new { l.AuctionId, l.LotNumber }).IsUnique();
 
