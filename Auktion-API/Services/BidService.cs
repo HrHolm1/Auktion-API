@@ -1,7 +1,9 @@
 ﻿using Auktion_API.DataAccess;
 using Auktion_API.DTOs;
+using Auktion_API.Hubs;
 using Auktion_API.Interfaces;
 using Auktion_API.Models;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -10,10 +12,12 @@ namespace Auktion_API.Services;
 public class BidService : IBidService
 {
     private readonly AuctionContext _db;
-
-    public BidService(AuctionContext db)
+    private readonly IHubContext<BidHub> _hubContext;
+    
+    public BidService(AuctionContext db,  IHubContext<BidHub> hubContext)
     {
         _db = db;
+        _hubContext = hubContext;
     }
     
     //Gets all bids for a specific lot
@@ -48,22 +52,38 @@ public class BidService : IBidService
     }
     
     //Places a new bid on a lot
-    public async Task<Bid?> PlaceBidAsync(Bid bid)
+    public async Task<Bid?> PlaceBidAsync(BidDto bidDtoInput)
     {
+
+        var bidToPlace = new Bid
+        {
+            Id = bidDtoInput.Id,
+            LotId = bidDtoInput.LotId,
+            UserId = bidDtoInput.UserId,
+            Amount = bidDtoInput.Amount,
+            PlacedAt = bidDtoInput.PlacedAt,
+        };
+        
         var highestBid = await _db.Bids
-            .Where(b => b.LotId == bid.LotId)   // only this lot
+            .Where(b => b.LotId == bidToPlace.LotId)   // only this lot
             .OrderByDescending(b => b.Amount)
             .FirstOrDefaultAsync();
 
-        if (highestBid != null && bid.Amount <= highestBid.Amount)
+        if (highestBid != null && bidToPlace.Amount <= highestBid.Amount)
             return null;
 
-        bid.PlacedAt = DateTime.UtcNow;
+        bidToPlace.PlacedAt = DateTime.UtcNow;
 
-        _db.Bids.Add(bid);
+        _db.Bids.Add(bidToPlace);
         await _db.SaveChangesAsync();
+        
+        // Notify all clients watching this lot
+        await _hubContext
+            .Clients
+            .Group(bidDtoInput.LotId.ToString())
+            .SendAsync("NewBid", bidDtoInput);
 
-        return bid;
+        return bidToPlace;
     }
 
     

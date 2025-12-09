@@ -1,4 +1,5 @@
-﻿using Auktion_API.Models;
+﻿using Auktion_API.DTOs;
+using Auktion_API.Models;
 using Auktion_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,7 @@ public class BidController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> PlaceBid(Bid bid)
+    public async Task<IActionResult> PlaceBid(BidDto bid)
     {
         var newBid = await _bidService.PlaceBidAsync(bid);
 

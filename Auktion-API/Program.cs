@@ -1,5 +1,6 @@
 using System.Text;
 using Auktion_API.DataAccess;
+using Auktion_API.Hubs;
 using Auktion_API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,11 @@ public class Program
         builder.Services.AddScoped<AuthService>();
         builder.Services.AddHostedService<LotClosingBackgroundService>();
         
+        // SignalR
+        builder.Services.AddSignalR();
+       
+
+        
         // Swagger
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -71,7 +77,17 @@ public class Program
             });
         }
         
-        app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        // SignalR
+        app.MapHub<BidHub>("/hubs/bids");
+        
+        app.UseCors(options =>
+            options
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+        );
+
         
         //app.UseHttpsRedirection();
         
