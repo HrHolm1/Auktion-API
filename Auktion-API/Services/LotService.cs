@@ -121,6 +121,29 @@ public class LotService : ILotService
         return true;
     }
 
+    public async Task<string?> GetWinnerEmailAsync(int lotId)
+    {
+        // 1. Find the lot and get its WinnerUserId
+        var winnerUserId = await _db.Lots
+            .Where(l => l.Id == lotId)
+            .Select(l => l.WinnerUserId)
+            .FirstOrDefaultAsync();
+
+        // No lot found or no winner set
+        if (!winnerUserId.HasValue)
+            return null;
+
+        // 2. Use that WinnerUserId to find the user and get their Email/Username
+        var winnerEmail = await _db.Users
+            .Where(u => u.Id == winnerUserId.Value)
+            .Select(u => u.Email)
+            .FirstOrDefaultAsync();
+
+        return winnerEmail; // null if user not found
+    }
+
+
+
     public async Task<List<LotImage>?> AddImagesAsync(int lotId, List<IFormFile> files, string webRootPath)
     {
         var lot = await _db.Lots.FirstOrDefaultAsync(l => l.Id == lotId);

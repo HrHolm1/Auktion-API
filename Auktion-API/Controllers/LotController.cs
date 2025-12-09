@@ -44,6 +44,17 @@ public class LotController : ControllerBase
         return Ok(lot);
     }
     
+    [HttpGet("{id}/winner")]
+    public async Task<IActionResult> GetWinnerById(int id)
+    {
+        var winnerEmail = await _lotService.GetWinnerEmailAsync(id);
+        
+        if (winnerEmail == null)
+            return NotFound();
+        
+        return Ok(new { email = winnerEmail });
+    }
+    
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create(Lot lot)
