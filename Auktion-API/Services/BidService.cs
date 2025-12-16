@@ -69,9 +69,19 @@ public class BidService : IBidService
             .OrderByDescending(b => b.Amount)
             .FirstOrDefaultAsync();
 
-        if (highestBid != null && bidToPlace.Amount <= highestBid.Amount)
-            return null;
+        var lotToBidOn = await _db.Lots
+            .Where(l => l.Id == bidToPlace.LotId)
+            .FirstOrDefaultAsync();
 
+        if (highestBid == null && bidToPlace.Amount < lotToBidOn.StartingPrice)
+        {
+            return null;
+        }
+
+        if (highestBid != null && bidToPlace.Amount <= highestBid.Amount) { 
+            return null; 
+        } 
+        
         bidToPlace.PlacedAt = DateTime.UtcNow;
 
         _db.Bids.Add(bidToPlace);
